@@ -1,0 +1,25 @@
+@page "/blocks"
+@using NotionCms.Services
+@using NotionCms.Components.Pages.Components
+@inject INotionService NotionService
+@inject IConfiguration Configuration
+
+@if (_blocks == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <NotionBlockRenderer Blocks="_blocks" />
+}
+
+@code {
+    private List<NotionBlock>? _blocks;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var blockId = Configuration["Settings:NotionBlockPageId"];
+        _blocks = await NotionService.GetPageBlocksAsync(blockId!);
+    }
+
+}

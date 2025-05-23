@@ -1,0 +1,36 @@
+@using NotionCms.Services
+@inherits LayoutComponentBase
+
+@foreach (var block in Blocks)
+{
+    @switch (block.Type)
+    {
+        case "heading_1":
+        case "heading_2":
+            <h2>@block.Text</h2>
+            break;
+        case "heading_3":
+            <h3>@block.Text</h3>
+            break;
+        case "paragraph":
+            <p>@block.Text</p>
+            break;
+        case "code":
+            <pre><code class="language-@block.Language">@block.Text</code></pre>
+            break;
+        case "image":
+            @if (!string.IsNullOrEmpty(block.ImageUrl))
+            {
+                <img src="@block.ImageUrl" alt="Image" style="max-width: 100%; margin: 1rem 0;" />
+            }
+            break;
+        default:
+            <p><em>Unsupported block: @block.Type</em></p>
+            break;
+    }
+}
+
+@code {
+    [Parameter]
+    public List<NotionBlock> Blocks { get; set; } = new();
+}

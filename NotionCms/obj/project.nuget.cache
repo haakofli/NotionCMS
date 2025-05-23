@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "LeyidzG+Q4g=",
+  "success": true,
+  "projectFilePath": "C:\\programmering\\NotionCms\\NotionCms\\NotionCms.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\hakon\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

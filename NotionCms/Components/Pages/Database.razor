@@ -1,0 +1,59 @@
+@page "/db"
+@using NotionCms.Services
+@inject INotionService NotionService
+@rendermode InteractiveServer
+
+<h2>Ansatte</h2>
+
+@if (_teamMembers == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <select @bind="_selectedRole" class="role-select">
+        <option value="">Alle</option>
+        @foreach (var role in Enum.GetValues<Role>())
+        {
+            <option value="@role.ToString()">@role</option>
+        }
+    </select>
+    
+    <div class="team-grid">
+        @foreach (var member in GetSelectedMembers())
+        {
+            <div class="card">
+                <img src="@member.PhotoUrl" alt="@member.Name" />
+                <div class="name">@member.Name</div>
+                @foreach (var role in member.Roles)
+                {
+                    <div class="role">@role.ToString()</div>
+                }
+            </div>
+        }
+    </div>
+}
+
+
+@code{
+
+    private List<TeamMember>? _teamMembers;
+    private string _selectedRole = "";
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _teamMembers = await NotionService.GetTeamMembersAsync();
+    }
+
+    private IEnumerable<TeamMember> GetSelectedMembers()
+    {
+        if (string.IsNullOrEmpty(_selectedRole))
+        {
+            return _teamMembers.Where(x => !x.IsDisabled);
+        }
+            
+        var parsed = Enum.TryParse<Role>(_selectedRole, out var role) ? role : Role.Unknown;
+        return _teamMembers.Where(x => !x.IsDisabled && x.Roles.Contains(parsed));
+    }
+
+}
